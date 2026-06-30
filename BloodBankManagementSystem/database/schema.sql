@@ -1,8 +1,8 @@
 -- Blood Bank Management System Database Schema
 
 -- Create database
-CREATE DATABASE IF NOT EXISTS blood_bank_management;
-USE blood_bank_management;
+CREATE DATABASE IF NOT EXISTS bloodbank;
+USE bloodbank;
 
 -- Blood Banks table
 CREATE TABLE IF NOT EXISTS blood_banks (
