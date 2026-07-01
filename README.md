@@ -128,7 +128,7 @@ The frontend will run on `http://localhost:3000`
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=your_password
-DB_NAME=blood_bank_management
+DB_NAME=bloodbank
 DB_PORT=3306
 
 # JWT Configuration
@@ -252,81 +252,3 @@ blood-bank-management/
 └── database/
     └── schema.sql
 ```
-
-## Security Features
-
-- Password hashing with bcrypt (10 salt rounds)
-- JWT token-based authentication
-- SQL injection prevention (parameterized queries)
-- CORS configuration
-- Input validation
-- Protected API routes
-
-## Responsive Design
-
-- Mobile-first approach
-- Breakpoints: 320px, 768px, 1024px, 1440px
-- Bottom navigation on mobile devices
-- Touch-friendly interfaces
-- Adaptive layouts
-
-## Production Deployment
-
-### Backend
-
-1. Set `NODE_ENV=production` in .env
-2. Use a process manager like PM2:
-   ```bash
-   npm install -g pm2
-   pm2 start server.js --name "blood-bank-api"
-   ```
-
-3. Configure reverse proxy (Nginx) for SSL
-
-### Frontend
-
-1. Build the application:
-   ```bash
-   npm run build
-   ```
-
-2. Deploy the `dist` folder to a web server or CDN
-
-### Database
-
-1. Use a production MySQL server
-2. Regular backups
-3. Enable MySQL slow query log for optimization
-
-## Troubleshooting
-
-### Backend won't start
-- Check if MySQL is running
-- Verify database credentials in .env
-- Ensure port 5000 is not in use
-
-### Frontend can't connect to backend
-- Verify backend is running on port 5000
-- Check CORS configuration
-- Ensure API proxy is configured in vite.config.js
-
-### Database connection errors
-- Verify MySQL service is running
-- Check database name, username, and password
-- Ensure database exists (run schema.sql)
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## License
-
-ISC License
-
-## Support
-
-For issues and questions, please open an issue in the repository.
