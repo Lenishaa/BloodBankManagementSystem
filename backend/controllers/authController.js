@@ -13,13 +13,13 @@ exports.register = async (req, res) => {
     await connection.beginTransaction();
 
     try {
-      // Insert blood bank
-      const [bloodBankResult] = await connection.execute(
-        'INSERT INTO blood_banks (name, location, address, contact_number, email) VALUES (?, ?, ?, ?, ?)',
-        [bloodBankName, location, address, contactNumber, email]
+      // Insert blood bank with custom bloodBankId as primary key
+      await connection.execute(
+        'INSERT INTO blood_banks (id, name, location, address, contact_number, email) VALUES (?, ?, ?, ?, ?, ?)',
+        [bloodBankId, bloodBankName, location, address, contactNumber, email]
       );
 
-      const newBloodBankId = bloodBankResult.insertId;
+      const newBloodBankId = bloodBankId;
 
       // Hash password
       const saltRounds = 10;

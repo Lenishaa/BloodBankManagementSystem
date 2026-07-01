@@ -159,11 +159,11 @@ npm install
 
 1. Go to `http://localhost:3000/register`
 2. Fill in blood bank details:
+   - Blood Bank ID: "BB001" (unique identifier for your blood bank)
    - Blood Bank Name: "Test Blood Bank"
    - Location: "New York"
    - Contact: "+1-555-0100"
 3. Fill in manager details:
-   - Employee ID: "EMP001"
    - Manager Name: "John Doe"
    - Password: "password123"
 4. Click "Register Blood Bank"
@@ -171,7 +171,7 @@ npm install
 ### Test Login
 
 1. Go to `http://localhost:3000/login`
-2. Enter Employee ID: "EMP001"
+2. Enter Blood Bank ID: "BB001"
 3. Enter Password: "password123"
 4. Click "Sign In"
 

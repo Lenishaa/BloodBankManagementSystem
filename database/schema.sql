@@ -1,12 +1,9 @@
--- Blood Bank Management System Database Schema
-
--- Create database
 CREATE DATABASE IF NOT EXISTS bloodbank;
 USE bloodbank;
 
 -- Blood Banks table
 CREATE TABLE IF NOT EXISTS blood_banks (
-    id INT PRIMARY KEY AUTO_INCREMENT,
+    id VARCHAR(50) NOT NULL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     location VARCHAR(255) NOT NULL,
     address TEXT,
@@ -28,14 +25,13 @@ CREATE TABLE IF NOT EXISTS managers (
     phone VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (blood_bank_id) REFERENCES blood_banks(id) ON DELETE CASCADE,
     INDEX idx_blood_bank_id (blood_bank_id)
 );
 
 -- Donors table
 CREATE TABLE IF NOT EXISTS donors (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    blood_bank_id INT NOT NULL,
+    blood_bank_id VARCHAR(50) NOT NULL,
     full_name VARCHAR(255) NOT NULL,
     age INT NOT NULL,
     gender ENUM('Male', 'Female', 'Other') NOT NULL,
@@ -57,7 +53,7 @@ CREATE TABLE IF NOT EXISTS donors (
 -- Blood Stocks table (current inventory)
 CREATE TABLE IF NOT EXISTS blood_stocks (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    blood_bank_id INT NOT NULL,
+    blood_bank_id VARCHAR(50) NOT NULL,
     blood_type ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') NOT NULL,
     quantity INT NOT NULL DEFAULT 0,
     collection_date DATE NOT NULL,
@@ -79,7 +75,7 @@ CREATE TABLE IF NOT EXISTS blood_stocks (
 -- Expired Stocks table (archive)
 CREATE TABLE IF NOT EXISTS expired_stocks (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    blood_bank_id INT NOT NULL,
+    blood_bank_id VARCHAR(50) NOT NULL,
     blood_type ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') NOT NULL,
     quantity INT NOT NULL,
     collection_date DATE,
@@ -97,7 +93,7 @@ CREATE TABLE IF NOT EXISTS expired_stocks (
 -- Utilized Stocks table (archive)
 CREATE TABLE IF NOT EXISTS utilized_stocks (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    blood_bank_id INT NOT NULL,
+    blood_bank_id VARCHAR(50) NOT NULL,
     blood_type ENUM('A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-') NOT NULL,
     quantity INT NOT NULL,
     collection_date DATE,
@@ -112,6 +108,7 @@ CREATE TABLE IF NOT EXISTS utilized_stocks (
     INDEX idx_utilized_at (utilized_at),
     INDEX idx_purpose (purpose)
 );
+
 
 -- Insert sample data for testing (optional)
 -- INSERT INTO blood_banks (name, location, address, contact_number, email) VALUES
