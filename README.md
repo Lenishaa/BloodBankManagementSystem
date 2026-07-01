@@ -59,7 +59,7 @@ A comprehensive, production-ready blood bank management application built with R
 ### 1. Clone the Repository
 
 ```bash
-cd blood-bank-management
+cd BloodBankManagementSystem
 ```
 
 ### 2. Database Setup
@@ -80,8 +80,8 @@ mysql -u root -p
 
 Then in MySQL:
 ```sql
-CREATE DATABASE blood_bank_management;
-USE blood_bank_management;
+CREATE DATABASE bloodbank;
+USE bloodbank;
 source database/schema.sql;
 ```
 
