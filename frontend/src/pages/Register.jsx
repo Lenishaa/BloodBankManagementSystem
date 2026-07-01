@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
 function Register() {
@@ -21,6 +21,7 @@ function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -43,7 +44,10 @@ function Register() {
 
     const result = await register(formData);
 
-    if (!result.success) {
+    if (result.success) {
+      // Navigate to dashboard immediately after successful registration
+      navigate('/');
+    } else {
       setError(result.message);
       setLoading(false);
     }

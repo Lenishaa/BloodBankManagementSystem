@@ -64,16 +64,25 @@ export const AuthProvider = ({ children }) => {
     try {
       const response = await axios.post('/api/auth/register', formData);
 
-      const { token: newToken, bloodBank } = response.data;
+      const { token: newToken, bloodBank, manager: managerData } = response.data;
       
       localStorage.setItem('token', newToken);
       axios.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
       setToken(newToken);
-      setManager({
-        bloodBankId: bloodBank.id,
-        bloodBankName: bloodBank.name,
-        location: bloodBank.location
-      });
+      
+      // Set complete manager data if provided, otherwise use bloodBank info
+      if (managerData) {
+        setManager(managerData);
+      } else {
+        setManager({
+          bloodBankId: bloodBank.id,
+          bloodBankName: bloodBank.name,
+          location: bloodBank.location
+        });
+      }
+      
+      // Small delay to ensure state is updated before navigation
+      await new Promise(resolve => setTimeout(resolve, 100));
       
       return { success: true };
     } catch (error) {

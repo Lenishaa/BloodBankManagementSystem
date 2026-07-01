@@ -247,9 +247,9 @@ exports.getStockSummary = async (req, res) => {
       [bloodBankId]
     );
 
-    // Get naturally expired stocks from blood_stocks
+    // Get naturally expired stocks from blood_stocks (only those still marked as Available)
     const [naturallyExpired] = await db.execute(
-      'SELECT COUNT(*) as count, SUM(quantity) as total FROM blood_stocks WHERE blood_bank_id = ? AND expiry_date < CURDATE()',
+      'SELECT COUNT(*) as count, SUM(quantity) as total FROM blood_stocks WHERE blood_bank_id = ? AND expiry_date < CURDATE() AND status = "Available"',
       [bloodBankId]
     );
 

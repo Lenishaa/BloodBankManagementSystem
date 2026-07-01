@@ -33,9 +33,17 @@ exports.register = async (req, res) => {
 
       await connection.commit();
 
+      // Get the created manager and blood bank details
+      const [managerResult] = await connection.execute(
+        'SELECT m.id, m.blood_bank_id, m.full_name, m.email, m.phone, b.name as blood_bank_name, b.location, b.address, b.contact_number FROM managers m JOIN blood_banks b ON m.blood_bank_id = b.id WHERE m.blood_bank_id = ?',
+        [bloodBankId]
+      );
+
+      const managerData = managerResult[0];
+
       // Generate JWT token
       const token = jwt.sign(
-        { managerId: newBloodBankId, bloodBankId: newBloodBankId },
+        { managerId: managerData.id, bloodBankId: managerData.blood_bank_id },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRE }
       );
@@ -43,7 +51,15 @@ exports.register = async (req, res) => {
       res.status(201).json({
         message: 'Blood bank registered successfully',
         token,
-        bloodBank: { id: newBloodBankId, name: bloodBankName, location }
+        bloodBank: { id: newBloodBankId, name: bloodBankName, location },
+        manager: {
+          id: managerData.id,
+          fullName: managerData.full_name,
+          email: managerData.email,
+          bloodBankId: managerData.blood_bank_id,
+          bloodBankName: managerData.blood_bank_name,
+          location: managerData.location
+        }
       });
     } catch (error) {
       await connection.rollback();
