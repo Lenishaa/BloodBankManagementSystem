@@ -6,7 +6,7 @@ require('dotenv').config();
 // Register new blood bank and manager
 exports.register = async (req, res) => {
   try {
-    const { bloodBankName, location, address, contactNumber, email, employeeId, password, managerName, managerEmail, managerPhone } = req.body;
+    const { bloodBankId, bloodBankName, location, address, contactNumber, email, password, managerName, managerEmail, managerPhone } = req.body;
 
     // Start transaction
     const connection = await db.getConnection();
@@ -19,23 +19,23 @@ exports.register = async (req, res) => {
         [bloodBankName, location, address, contactNumber, email]
       );
 
-      const bloodBankId = bloodBankResult.insertId;
+      const newBloodBankId = bloodBankResult.insertId;
 
       // Hash password
       const saltRounds = 10;
       const passwordHash = await bcrypt.hash(password, saltRounds);
 
-      // Insert manager
+      // Insert manager with bloodBankId as identifier
       await connection.execute(
-        'INSERT INTO managers (employee_id, password_hash, blood_bank_id, full_name, email, phone) VALUES (?, ?, ?, ?, ?, ?)',
-        [employeeId, passwordHash, bloodBankId, managerName, managerEmail, managerPhone]
+        'INSERT INTO managers (blood_bank_id, password_hash, full_name, email, phone) VALUES (?, ?, ?, ?, ?)',
+        [bloodBankId, passwordHash, managerName, managerEmail, managerPhone]
       );
 
       await connection.commit();
 
       // Generate JWT token
       const token = jwt.sign(
-        { managerId: bloodBankId, employeeId, bloodBankId },
+        { managerId: newBloodBankId, bloodBankId: newBloodBankId },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRE }
       );
@@ -43,7 +43,7 @@ exports.register = async (req, res) => {
       res.status(201).json({
         message: 'Blood bank registered successfully',
         token,
-        bloodBank: { id: bloodBankId, name: bloodBankName, location }
+        bloodBank: { id: newBloodBankId, name: bloodBankName, location }
       });
     } catch (error) {
       await connection.rollback();
@@ -59,12 +59,12 @@ exports.register = async (req, res) => {
 // Manager login
 exports.login = async (req, res) => {
   try {
-    const { employeeId, password } = req.body;
+    const { bloodBankId, password } = req.body;
 
-    // Find manager
+    // Find manager by bloodBankId
     const [managers] = await db.execute(
-      'SELECT m.*, b.name as blood_bank_name, b.location FROM managers m JOIN blood_banks b ON m.blood_bank_id = b.id WHERE m.employee_id = ?',
-      [employeeId]
+      'SELECT m.*, b.name as blood_bank_name, b.location FROM managers m JOIN blood_banks b ON m.blood_bank_id = b.id WHERE m.blood_bank_id = ?',
+      [bloodBankId]
     );
 
     if (managers.length === 0) {
@@ -82,7 +82,7 @@ exports.login = async (req, res) => {
 
     // Generate JWT token
     const token = jwt.sign(
-      { managerId: manager.id, employeeId: manager.employee_id, bloodBankId: manager.blood_bank_id },
+      { managerId: manager.id, bloodBankId: manager.blood_bank_id },
       process.env.JWT_SECRET,
       { expiresIn: process.env.JWT_EXPIRE }
     );
@@ -92,7 +92,6 @@ exports.login = async (req, res) => {
       token,
       manager: {
         id: manager.id,
-        employeeId: manager.employee_id,
         fullName: manager.full_name,
         email: manager.email,
         bloodBankId: manager.blood_bank_id,
@@ -109,7 +108,7 @@ exports.login = async (req, res) => {
 exports.getProfile = async (req, res) => {
   try {
     const [managers] = await db.execute(
-      'SELECT m.id, m.employee_id, m.full_name, m.email, m.phone, b.name as blood_bank_name, b.location, b.address, b.contact_number FROM managers m JOIN blood_banks b ON m.blood_bank_id = b.id WHERE m.id = ?',
+      'SELECT m.id, m.blood_bank_id, m.full_name, m.email, m.phone, b.name as blood_bank_name, b.location, b.address, b.contact_number FROM managers m JOIN blood_banks b ON m.blood_bank_id = b.id WHERE m.id = ?',
       [req.manager.managerId]
     );
 

@@ -21,16 +21,14 @@ CREATE TABLE IF NOT EXISTS blood_banks (
 -- Managers table
 CREATE TABLE IF NOT EXISTS managers (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    employee_id VARCHAR(50) UNIQUE NOT NULL,
+    blood_bank_id VARCHAR(50) UNIQUE NOT NULL,
     password_hash VARCHAR(255) NOT NULL,
-    blood_bank_id INT NOT NULL,
     full_name VARCHAR(255) NOT NULL,
     email VARCHAR(255),
     phone VARCHAR(20),
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY (blood_bank_id) REFERENCES blood_banks(id) ON DELETE CASCADE,
-    INDEX idx_employee_id (employee_id),
     INDEX idx_blood_bank_id (blood_bank_id)
 );
 

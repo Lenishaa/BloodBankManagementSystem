@@ -5,13 +5,13 @@ import { useAuth } from '../context/AuthContext';
 function Register() {
   const [formData, setFormData] = useState({
     // Blood Bank details
+    bloodBankId: '',
     bloodBankName: '',
     location: '',
     address: '',
     contactNumber: '',
     email: '',
     // Manager details
-    employeeId: '',
     password: '',
     confirmPassword: '',
     managerName: '',
@@ -62,6 +62,19 @@ function Register() {
         <form onSubmit={handleSubmit}>
           <h3 className="text-lg font-semibold mb-3">Blood Bank Information</h3>
           
+          <div className="form-group">
+            <label className="form-label">Blood Bank ID *</label>
+            <input
+              type="text"
+              name="bloodBankId"
+              className="form-control"
+              value={formData.bloodBankId}
+              onChange={handleChange}
+              placeholder="Enter unique blood bank ID"
+              required
+            />
+          </div>
+
           <div className="form-group">
             <label className="form-label">Blood Bank Name *</label>
             <input
@@ -122,18 +135,6 @@ function Register() {
           </div>
 
           <h3 className="text-lg font-semibold mb-3 mt-4">Manager Information</h3>
-
-          <div className="form-group">
-            <label className="form-label">Employee ID *</label>
-            <input
-              type="text"
-              name="employeeId"
-              className="form-control"
-              value={formData.employeeId}
-              onChange={handleChange}
-              required
-            />
-          </div>
 
           <div className="form-group">
             <label className="form-label">Manager Name *</label>

@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 
 function Login() {
   const [formData, setFormData] = useState({
-    employeeId: '',
+    bloodBankId: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -24,7 +24,7 @@ function Login() {
     setLoading(true);
     setError('');
 
-    const result = await login(formData.employeeId, formData.password);
+    const result = await login(formData.bloodBankId, formData.password);
 
     if (!result.success) {
       setError(result.message);
@@ -44,14 +44,14 @@ function Login() {
 
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label className="form-label">Employee ID</label>
+            <label className="form-label">Blood Bank ID</label>
             <input
               type="text"
-              name="employeeId"
+              name="bloodBankId"
               className="form-control"
-              value={formData.employeeId}
+              value={formData.bloodBankId}
               onChange={handleChange}
-              placeholder="Enter your employee ID"
+              placeholder="Enter your blood bank ID"
               required
             />
           </div>

@@ -37,10 +37,10 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const login = async (employeeId, password) => {
+  const login = async (bloodBankId, password) => {
     try {
       const response = await axios.post('/api/auth/login', {
-        employeeId,
+        bloodBankId,
         password
       });
 
