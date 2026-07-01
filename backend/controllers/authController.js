@@ -132,7 +132,22 @@ exports.getProfile = async (req, res) => {
       return res.status(404).json({ message: 'Manager not found' });
     }
 
-    res.json(managers[0]);
+    const manager = managers[0];
+    
+    // Transform snake_case to camelCase for frontend consistency
+    const transformedManager = {
+      id: manager.id,
+      bloodBankId: manager.blood_bank_id,
+      fullName: manager.full_name,
+      email: manager.email,
+      phone: manager.phone,
+      bloodBankName: manager.blood_bank_name,
+      location: manager.location,
+      address: manager.address,
+      contactNumber: manager.contact_number
+    };
+
+    res.json(transformedManager);
   } catch (error) {
     res.status(500).json({ message: 'Error fetching profile', error: error.message });
   }

@@ -740,7 +740,11 @@ tbody tr:hover {
   }
 
   .user-info {
-    display: none;
+    font-size: 0.75rem;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .sidebar {
