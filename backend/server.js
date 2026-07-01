@@ -11,7 +11,6 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
-  "http://localhost:3000",
   "https://blood-bank-management-system-black.vercel.app",
   "https://bloodbankmanagementsystem-omega.vercel.app"
 ];
