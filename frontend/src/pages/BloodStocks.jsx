@@ -95,11 +95,21 @@ function BloodStocks() {
 
   const handleEdit = (stock) => {
     setEditingStock(stock);
+    // Format dates to YYYY-MM-DD format for date input
+    const formatDate = (date) => {
+      if (!date) return '';
+      const d = new Date(date);
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+    
     setFormData({
       bloodType: stock.blood_type,
       quantity: stock.quantity,
-      collectionDate: stock.collection_date,
-      expiryDate: stock.expiry_date,
+      collectionDate: formatDate(stock.collection_date),
+      expiryDate: formatDate(stock.expiry_date),
       status: stock.status
     });
     setShowModal(true);
