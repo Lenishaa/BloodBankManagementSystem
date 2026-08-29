@@ -25,6 +25,11 @@ function Donors() {
     medicalNotes: ''
   });
 
+  const getGenderCount = (gender) => {
+    const match = stats?.byGender?.find((item) => item.gender === gender);
+    return match ? Number(match.count) : 0;
+  };
+
   useEffect(() => {
     fetchDonors();
     fetchStats();
@@ -154,18 +159,22 @@ function Donors() {
 
       {/* Stats Cards */}
       {stats && (
-        <div className="grid grid-cols-3 gap-4 mb-6">
+        <div className="grid grid-cols-4 gap-4 mb-6">
           <div className="card">
             <h3 className="text-sm text-muted mb-2">Total Donors</h3>
             <p className="text-2xl font-bold text-primary">{stats.total}</p>
           </div>
           <div className="card">
-            <h3 className="text-sm text-muted mb-2">Blood Types</h3>
-            <p className="text-2xl font-bold text-info">{stats.byBloodType?.length || 0}</p>
+            <h3 className="text-sm text-muted mb-2">Male Donors</h3>
+            <p className="text-2xl font-bold text-info">{getGenderCount('Male')}</p>
           </div>
           <div className="card">
-            <h3 className="text-sm text-muted mb-2">Recent Donors</h3>
-            <p className="text-2xl font-bold text-success">{stats.recentDonors?.length || 0}</p>
+            <h3 className="text-sm text-muted mb-2">Female Donors</h3>
+            <p className="text-2xl font-bold text-success">{getGenderCount('Female')}</p>
+          </div>
+          <div className="card">
+            <h3 className="text-sm text-muted mb-2">Blood Types</h3>
+            <p className="text-2xl font-bold text-warning">{stats.byBloodType?.length || 0}</p>
           </div>
         </div>
       )}
