@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext';
 function Login() {
   const [formData, setFormData] = useState({
     bloodBankId: '',
+    email: '',
     password: ''
   });
   const [error, setError] = useState('');
@@ -24,7 +25,7 @@ function Login() {
     setLoading(true);
     setError('');
 
-    const result = await login(formData.bloodBankId, formData.password);
+    const result = await login(formData.bloodBankId, formData.email, formData.password);
 
     if (!result.success) {
       setError(result.message);
@@ -52,6 +53,19 @@ function Login() {
               value={formData.bloodBankId}
               onChange={handleChange}
               placeholder="Enter your blood bank ID"
+              required
+            />
+          </div>
+
+          <div className="form-group">
+            <label className="form-label">Email</label>
+            <input
+              type="email"
+              name="email"
+              className="form-control"
+              value={formData.email}
+              onChange={handleChange}
+              placeholder="Enter your email"
               required
             />
           </div>

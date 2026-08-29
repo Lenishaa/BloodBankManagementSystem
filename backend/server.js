@@ -11,8 +11,7 @@ const app = express();
 
 // Middleware
 const allowedOrigins = [
-  "https://blood-bank-management-system-black.vercel.app",
-  "https://bloodbankmanagementsystem-omega.vercel.app"
+  'https://blood-bank-management-system-black.vercel.app'
 ];
 
 app.use(cors({

@@ -75,12 +75,16 @@ exports.register = async (req, res) => {
 // Manager login
 exports.login = async (req, res) => {
   try {
-    const { bloodBankId, password } = req.body;
+    const { bloodBankId, email, password } = req.body;
 
-    // Find manager by bloodBankId
+    if (!bloodBankId || !email || !password) {
+      return res.status(400).json({ message: 'Blood Bank ID, email and password are required' });
+    }
+
+    // Find manager by bloodBankId and email
     const [managers] = await db.execute(
-      'SELECT m.*, b.name as blood_bank_name, b.location FROM managers m JOIN blood_banks b ON m.blood_bank_id = b.id WHERE m.blood_bank_id = ?',
-      [bloodBankId]
+      'SELECT m.*, b.name as blood_bank_name, b.location FROM managers m JOIN blood_banks b ON m.blood_bank_id = b.id WHERE m.blood_bank_id = ? AND m.email = ?',
+      [bloodBankId, email]
     );
 
     if (managers.length === 0) {
