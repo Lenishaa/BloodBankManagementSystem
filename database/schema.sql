@@ -90,6 +90,34 @@ CREATE TABLE IF NOT EXISTS expired_stocks (
     INDEX idx_blood_type (blood_type)
 );
 
+-- Enable MySQL Event Scheduler (required for scheduled events)
+SET GLOBAL event_scheduler = ON;
+
+-- Auto-expire blood stock every 1 hour and archive it in expired_stocks
+CREATE EVENT IF NOT EXISTS expire_blood_stock_hourly
+ON SCHEDULE EVERY 1 HOUR
+STARTS CURRENT_TIMESTAMP
+DO
+BEGIN
+    INSERT INTO expired_stocks (blood_bank_id, blood_type, quantity, collection_date, expiry_date, donor_id, reason)
+    SELECT
+        bs.blood_bank_id,
+        bs.blood_type,
+        bs.quantity,
+        bs.collection_date,
+        bs.expiry_date,
+        bs.donor_id,
+        'Auto-expired by scheduled event'
+    FROM blood_stocks bs
+    WHERE bs.status = 'Available'
+      AND bs.expiry_date < CURDATE();
+
+    UPDATE blood_stocks
+    SET status = 'Expired'
+    WHERE status = 'Available'
+      AND expiry_date < CURDATE();
+END;
+
 -- Utilized Stocks table (archive)
 CREATE TABLE IF NOT EXISTS utilized_stocks (
     id INT PRIMARY KEY AUTO_INCREMENT,
